@@ -16,8 +16,8 @@ type Config struct {
 		Pass string `yaml:"pass"` // Mysql密码
 		Name string `yaml:"name"` // Mysql数据库名
 	} `yaml:"mysql"`
-
-	v *viper.Viper
+	Salt string `yaml:"salt"` // 加密盐
+	v    *viper.Viper
 }
 
 // LoadConfig 加载全局配置文件
@@ -43,6 +43,7 @@ func GenerateConfigFile(path string) {
 	c.MySQL.User = "douyin"
 	c.MySQL.Pass = "douyin"
 	c.MySQL.Name = "douyin"
+	c.Salt = "douyin"
 	data, err := yaml.Marshal(c)
 	if err != nil {
 		log.Println("生成示例配置文件失败：", err)
