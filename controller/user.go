@@ -2,6 +2,14 @@ package controller
 
 import "github.com/gin-gonic/gin"
 
+// InitUserRoute 初始化用户相关路由
+// /douyin/user
+func InitUserRoute(r *gin.RouterGroup) {
+	r.POST("/register", UserRegister)
+	r.POST("/login", UserLogin)
+	r.GET("/", GetUser)
+}
+
 type UserRegisterResponse struct {
 	Response
 	UserID int    `json:"user_id"` // 用户ID

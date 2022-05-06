@@ -2,6 +2,13 @@ package controller
 
 import "github.com/gin-gonic/gin"
 
+// InitFavoriteRoute 初始化点赞相关路由
+// /douyin/favorite
+func InitFavoriteRoute(r *gin.RouterGroup) {
+	r.POST("/action", FavoriteAction)
+	r.GET("/list", GetFavoriteList)
+}
+
 type FavoriteActionResponse struct {
 	Response
 }

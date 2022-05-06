@@ -2,6 +2,13 @@ package controller
 
 import "github.com/gin-gonic/gin"
 
+// InitPublishRoute 初始化投稿相关路由
+// /douyin/publish
+func InitPublishRoute(r *gin.RouterGroup) {
+	r.POST("/action", PublishAction)
+	r.GET("/list", GetPublishList)
+}
+
 type PublishActionResponse struct {
 	Response
 }

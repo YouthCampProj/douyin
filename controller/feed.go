@@ -4,6 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// InitFeedRoute 初始化视频流相关路由
+// /douyin/feed
+func InitFeedRoute(r *gin.RouterGroup) {
+	r.GET("/", GetFeed)
+}
+
 type Feed struct {
 	Response
 	NextTime  int     `json:"next_time,omitempty"`  // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time

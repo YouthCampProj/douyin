@@ -2,6 +2,14 @@ package controller
 
 import "github.com/gin-gonic/gin"
 
+// InitRelationRoutes 初始化互动相关接口
+// /douyin/relation
+func InitRelationRoutes(r *gin.RouterGroup) {
+	r.POST("/action", RelationAction)
+	r.GET("/follow/list", GetRelationFollowList)
+	r.GET("/follower/list", GetRelationFollowerList)
+}
+
 type RelationActionResponse struct {
 	Response
 }
