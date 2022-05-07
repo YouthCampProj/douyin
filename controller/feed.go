@@ -25,9 +25,8 @@ func GetFeed(c *gin.Context) {
 		latestTime = time.Now().Unix()
 	}
 
-	//TODO: 视频流接口
 	feedService := &service.FeedService{
 		LatestTime: latestTime,
 	}
-	feedService.GetFeed()
+	c.JSON(200, feedService.GetFeed())
 }

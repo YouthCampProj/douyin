@@ -33,7 +33,8 @@ func BuildFeedResponse(code int, feedList []*FeedResponseBuilder, nextTime int64
 	res.Response = NewResponse(CodeSuccess, "")
 	res.NextTime = uint64(nextTime)
 	for _, feed := range feedList {
-		authorResponse
-		res.VideoList = append(res.VideoList, BuildVideoResponse())
+		authorResponse := BuildUserResponse(feed.Author, false)
+		res.VideoList = append(res.VideoList, BuildVideoResponse(feed.Video, authorResponse, false))
 	}
+	return res
 }

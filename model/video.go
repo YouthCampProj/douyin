@@ -15,7 +15,7 @@ type Video struct {
 func GetVideoByTime(unixTime int64) ([]*Video, error) {
 	var videos []*Video
 	latest := time.Unix(unixTime, 0)
-	err := DB.Limit(30).Where("created_at > ?", latest).Find(&videos).Error
+	err := DB.Limit(30).Where("created_at < ?", latest).Find(&videos).Error
 	if err != nil {
 		return nil, err
 	}
