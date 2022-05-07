@@ -9,15 +9,6 @@ func InitPublishRoute(r *gin.RouterGroup) {
 	r.GET("/list", GetPublishList)
 }
 
-type PublishActionResponse struct {
-	Response
-}
-
-type PublishListResponse struct {
-	Response
-	VideoList []Video `json:"video_list,omitempty"` // 用户发布的视频列表
-}
-
 // PublishAction
 // 登录用户选择视频上传
 // POST /douyin/publish/action/

@@ -9,15 +9,6 @@ func InitCommentRoute(r *gin.RouterGroup) {
 	r.GET("/list", GetCommentList)
 }
 
-type CommentActionResponse struct {
-	Response
-}
-
-type CommentListResponse struct {
-	Response
-	CommentList []Comment `json:"comment_list,omitempty"`
-}
-
 // CommentAction 评论操作
 // 登录用户对视频进行评论
 // POST /douyin/comment/action

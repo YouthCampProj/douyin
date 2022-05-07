@@ -1,10 +1,14 @@
-package service
+package config
 
 import (
 	"github.com/spf13/viper"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+)
+
+var (
+	Conf *Config
 )
 
 type Config struct {
@@ -21,17 +25,18 @@ type Config struct {
 }
 
 // LoadConfig 加载全局配置文件
-func LoadConfig(path string) (*Config, error) {
+func LoadConfig(path string) error {
 	c := &Config{}
 	c.v = viper.New()
 	c.v.SetConfigFile(path)
 	if err := c.v.ReadInConfig(); err != nil {
-		return nil, err
+		return err
 	}
 	if err := c.v.Unmarshal(c); err != nil {
-		return nil, err
+		return err
 	}
-	return c, nil
+	Conf = c
+	return nil
 }
 
 // GenerateConfigFile 生成示例配置文件

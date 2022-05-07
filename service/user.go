@@ -1,19 +1,28 @@
 package service
 
 import (
-	"errors"
 	"github.com/YouthCampProj/douyin/model"
+	"github.com/YouthCampProj/douyin/pkg/config"
+	"github.com/YouthCampProj/douyin/pkg/serializer"
 	"github.com/YouthCampProj/douyin/utils"
 )
 
+type UserLoginService struct {
+	username string
+	password string
+}
+
 // GetUserByBasicAuth 通过用户名与密码获取用户
-func GetUserByBasicAuth(username string, password string) (*model.User, error) {
-	user := &model.User{}
-	// 完整加载用户到内存 避免二次查询
-	DB.Find(user, "username=?", username)
-	// 对密码进行匹配
-	if utils.StrMatch(user.Password, password, Conf.Salt) {
-		return user, nil
+func (u *UserLoginService) Login(username string, password string) *serializer.UserLoginResponse {
+	user, err := model.GetUserByUsername(username)
+	if err != nil {
+		return serializer.BuildUserLoginResponse(serializer.CodeUserNotFound, nil, "")
 	}
-	return nil, errors.New("用户名或密码错误")
+	// 对密码进行匹配
+	if !utils.StrMatch(user.Password, password, config.Conf.Salt) {
+		return serializer.BuildUserLoginResponse(serializer.CodeUserLoginFailed, nil, "")
+	}
+	// 生成token
+
+	return serializer.BuildUserLoginResponse(serializer.CodeSuccess, user, "")
 }

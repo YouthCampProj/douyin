@@ -10,12 +10,6 @@ func InitFeedRoute(r *gin.RouterGroup) {
 	r.GET("/", GetFeed)
 }
 
-type Feed struct {
-	Response
-	NextTime  int     `json:"next_time,omitempty"`  // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
-	VideoList []Video `json:"video_list,omitempty"` // 视频列表
-}
-
 // GetFeed 视频流接口
 // 无需登录，返回按投稿时间倒序的视频列表
 // 视频数由服务端控制，单次最多30个

@@ -9,10 +9,6 @@ func InitFavoriteRoute(r *gin.RouterGroup) {
 	r.GET("/list", GetFavoriteList)
 }
 
-type FavoriteActionResponse struct {
-	Response
-}
-
 // FavoriteAction 赞操作
 // 登录用户对视频的点赞和取消点赞操作
 // POST /douyin/favorite/action/
@@ -23,11 +19,6 @@ func FavoriteAction(c *gin.Context) {
 	//videoID := c.Query("video_id")       // 视频ID
 	//actionType := c.Query("action_type") // 1-点赞, 2-取消点赞
 	// TODO 赞操作接口
-}
-
-type FavoriteListResponse struct {
-	Response
-	VideoList []Video `json:"video_list,omitempty"`
 }
 
 // GetFavoriteList 获取点赞列表

@@ -1,23 +1,16 @@
 package service
 
 import (
-	"gorm.io/gorm"
-)
-
-var (
-	DB   *gorm.DB
-	Conf *Config
+	"github.com/YouthCampProj/douyin/model"
+	"github.com/YouthCampProj/douyin/pkg/config"
 )
 
 func Init() {
-	var err error
-	Conf, err = LoadConfig("config/config.yaml")
-	if err != nil {
-		GenerateConfigFile("config/config.example.yaml")
+	if err := config.LoadConfig("config/config.yaml"); err != nil {
+		config.GenerateConfigFile("config/config.example.yaml")
 		panic(err)
 	}
-	DB, err = LoadDatabase()
-	if err != nil {
+	if err := model.LoadDatabase(); err != nil {
 		panic(err)
 	}
 }

@@ -10,23 +10,6 @@ func InitUserRoute(r *gin.RouterGroup) {
 	r.GET("/", GetUser)
 }
 
-type UserRegisterResponse struct {
-	Response
-	UserID int    `json:"user_id"` // 用户ID
-	Token  string `json:"token"`   // 用户鉴权token
-}
-
-type UserLoginResponse struct {
-	Response
-	UserID int    `json:"user_id,omitempty"` // 用户ID
-	Token  string `json:"token,omitempty"`   // 用户鉴权token
-}
-
-type UserResponse struct {
-	Response
-	User User `json:"user"` // 用户信息
-}
-
 // UserRegister 用户注册
 // 新用户注册时提供用户名，密码，昵称即可,用户名需要保证唯一。
 // 创建成功后返回用户 id 和权限token
