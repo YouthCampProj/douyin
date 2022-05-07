@@ -54,7 +54,7 @@ func GenerateConfigFile(path string) {
 		log.Println("生成示例配置文件失败：", err)
 		return
 	}
-	if err := ioutil.WriteFile(path, data, 0644); err != nil {
+	if err := ioutil.WriteFile(path, data, 0600); err != nil {
 		log.Println("生成示例配置文件失败：", err)
 		return
 	}
