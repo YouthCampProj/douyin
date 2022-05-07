@@ -34,3 +34,9 @@ func Str2uint64(str string) uint64 {
 	res, _ := strconv.ParseUint(str, 10, 64)
 	return res
 }
+
+// Str2int64 将字符串转换为int64 使用前请确保传入的字符串是合法的
+func Str2int64(str string) int64 {
+	res, _ := strconv.ParseInt(str, 10, 64)
+	return res
+}

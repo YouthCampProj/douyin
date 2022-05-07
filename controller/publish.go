@@ -14,7 +14,6 @@ func InitPublishRoute(r *gin.RouterGroup) {
 // POST /douyin/publish/action/
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18875092
 func PublishAction(c *gin.Context) {
-	//userid := c.Query("user_id")
 	//token := c.Query("token")
 	//data, err := c.FormFile("data")
 	// TODO 投稿接口
@@ -26,7 +25,6 @@ func PublishAction(c *gin.Context) {
 // GET /douyin/publish/list/
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18901444
 func GetPublishList(c *gin.Context) {
-	//userid := c.Query("user_id")
 	//token := c.Query("token")
 	// TODO 发布列表接口
 }
