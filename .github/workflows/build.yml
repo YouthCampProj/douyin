@@ -37,6 +37,6 @@ jobs:
       run: go test -v ./...
 
     - name: golang-security-action
-      uses: Ynniss/golang-security-action@v0.1.3
-      with: 
-        CODE_PATH: .
+      run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          gosec -exclude=G104 ./...
