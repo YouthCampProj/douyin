@@ -5,3 +5,4 @@ mysql:
   user: douyin
   pass: douyin
   name: douyin
+salt: douyin
