@@ -23,7 +23,6 @@ func LoadDatabase() error {
 		&Comment{},
 		&Favorite{},
 		&Relation{},
-		&Token{},
 		&User{},
 		&Video{},
 	); err != nil {

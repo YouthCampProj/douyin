@@ -10,8 +10,7 @@ package model
 
 type Comment struct {
 	Common
-	UserID      int    `json:"user_id"`      // 用户ID
-	VideoID     int    `json:"video_id"`     // 视频ID
-	CommentID   int    `json:"comment_id"`   // 评论ID
+	UserID      uint64 `json:"user_id"`      // 用户ID
+	VideoID     uint64 `json:"video_id"`     // 视频ID
 	CommentText string `json:"comment_text"` // 评论内容
 }
