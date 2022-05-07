@@ -1,6 +1,10 @@
 package utils
 
-import "strconv"
+import (
+	"github.com/YouthCampProj/douyin/pkg/serializer"
+	"mime/multipart"
+	"strconv"
+)
 
 // StrEncrypt 对传入字符串进行加密
 func StrEncrypt(str string, salt string) string {
@@ -39,4 +43,16 @@ func Str2uint64(str string) uint64 {
 func Str2int64(str string) int64 {
 	res, _ := strconv.ParseInt(str, 10, 64)
 	return res
+}
+
+func PublishDataTest(data *multipart.FileHeader) int {
+	if data.Size == 0 {
+		return serializer.CodePublishFileInvalid
+	}
+	if data.Filename == "" {
+		return serializer.CodePublishFileInvalid
+	}
+	return serializer.CodeSuccess
+	// TODO: 对传入的数据进行基本的验证(文件大小|文件名等)
+
 }
