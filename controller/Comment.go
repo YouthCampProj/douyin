@@ -5,7 +5,7 @@ import "github.com/gin-gonic/gin"
 // InitCommentRoute 初始化评论相关路由
 // /douyin/comment
 func InitCommentRoute(r *gin.RouterGroup) {
-	r.POST("/action", CommentAction)
+	r.POST("/action/", CommentAction)
 	r.GET("/list", GetCommentList)
 }
 

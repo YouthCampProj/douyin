@@ -1,4 +1,8 @@
 debug: true
+site:
+  domain: localhost
+  ip: 0.0.0.0
+  port: 8080
 mysql:
   host: localhost
   port: 3306

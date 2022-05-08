@@ -3,7 +3,9 @@ package utils
 import (
 	"github.com/YouthCampProj/douyin/pkg/serializer"
 	"mime/multipart"
+	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 // StrEncrypt 对传入字符串进行加密
@@ -55,4 +57,8 @@ func PublishDataTest(data *multipart.FileHeader) int {
 	return serializer.CodeSuccess
 	// TODO: 对传入的数据进行基本的验证(文件大小|文件名等)
 
+}
+
+func GetExtensionName(fileName string) string {
+	return strings.ToLower(filepath.Ext(fileName))
 }

@@ -22,7 +22,7 @@ func GetFeed(c *gin.Context) {
 	//可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
 	latestTime := utils.Str2int64(c.Query("latest_time"))
 	if latestTime == 0 {
-		latestTime = time.Now().Unix()
+		latestTime = time.Now().UnixMilli()
 	}
 
 	feedService := &service.FeedService{

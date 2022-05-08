@@ -11,8 +11,8 @@ import (
 // InitUserRoute 初始化用户相关路由
 // /douyin/user
 func InitUserRoute(r *gin.RouterGroup) {
-	r.POST("/register", UserRegister)
-	r.POST("/login", UserLogin)
+	r.POST("register/", UserRegister)
+	r.POST("login/", UserLogin)
 	r.GET("/", GetUserInfo)
 }
 
