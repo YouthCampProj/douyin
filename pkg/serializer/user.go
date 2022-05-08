@@ -46,8 +46,8 @@ type UserRegisterResponse struct {
 // UserLoginResponse 用户登录响应
 type UserLoginResponse struct {
 	Response
-	UserID uint64 `json:"user_id,omitempty"` // 用户ID
-	Token  string `json:"token,omitempty"`   // 用户鉴权token
+	UserID uint64 `json:"user_id"` // 用户ID
+	Token  string `json:"token"`   // 用户鉴权token
 }
 
 // UserResponse 获取用户信息响应

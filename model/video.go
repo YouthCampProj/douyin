@@ -14,10 +14,30 @@ type Video struct {
 
 func GetVideoByTime(unixTime int64) ([]*Video, error) {
 	var videos []*Video
-	latest := time.Unix(unixTime, 0)
+	latest := time.UnixMilli(unixTime)
 	err := DB.Limit(30).Where("created_at < ?", latest).Find(&videos).Error
 	if err != nil {
 		return nil, err
 	}
 	return videos, nil
+}
+
+func GetVideoByAuthorID(authorID uint64) ([]*Video, error) {
+	var videos []*Video
+	err := DB.Where("author_id = ?", authorID).Find(&videos).Error
+	if err != nil {
+		return nil, err
+	}
+	return videos, nil
+}
+
+func NewVideo() *Video {
+	return &Video{
+		FavoriteCount: 0,
+		CommentCount:  0,
+	}
+}
+
+func (v *Video) Save() error {
+	return DB.Save(v).Error
 }
