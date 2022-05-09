@@ -1,2 +1,5 @@
 /uploads/*
 !.gitkeep
+*.exe
+*.exe~
+*config\config.yaml
