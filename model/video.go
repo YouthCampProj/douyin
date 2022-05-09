@@ -31,6 +31,16 @@ func GetVideoByAuthorID(authorID uint64) ([]*Video, error) {
 	return videos, nil
 }
 
+// GetVideoListByID 通过视频ID获取视频列表
+func GetVideoListByID(ids []uint64) ([]*Video, error) {
+	var videos []*Video
+	err := DB.Where("id IN (?)", ids).Find(&videos).Error
+	if err != nil {
+		return nil, err
+	}
+	return videos, nil
+}
+
 func NewVideo() *Video {
 	return &Video{
 		FavoriteCount: 0,

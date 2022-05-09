@@ -35,6 +35,22 @@ func UserIDTest(userID string) bool {
 	// TODO: 对传入的用户ID进行基本的验证(字符|长度等)
 }
 
+func VideoIDTest(videoID string) bool {
+	return videoID != ""
+	// TODO: 对传入的视频ID进行基本的验证(字符|长度等)
+}
+
+func FavoriteActionTypeTest(actionType string) bool {
+	switch actionType {
+	case "1":
+		return true
+	case "2":
+		return true
+	default:
+		return false
+	}
+}
+
 // Str2uint64 将字符串转换为uint64 使用前请确保传入的字符串是合法的
 func Str2uint64(str string) uint64 {
 	res, _ := strconv.ParseUint(str, 10, 64)
@@ -45,6 +61,12 @@ func Str2uint64(str string) uint64 {
 func Str2int64(str string) int64 {
 	res, _ := strconv.ParseInt(str, 10, 64)
 	return res
+}
+
+// Str2int32 将字符串转换为int32 使用前请确保传入的字符串是合法的
+func Str2int32(str string) int32 {
+	res, _ := strconv.ParseInt(str, 10, 32)
+	return int32(res)
 }
 
 func PublishDataTest(data *multipart.FileHeader) int {
