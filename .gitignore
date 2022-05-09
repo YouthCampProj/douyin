@@ -2,4 +2,4 @@
 !.gitkeep
 *.exe
 *.exe~
-*config\config.yaml
+*config/config.yaml
