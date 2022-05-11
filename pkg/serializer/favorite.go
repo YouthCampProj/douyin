@@ -38,7 +38,7 @@ type FavoriteActionResponse struct {
 // FavoriteListResponse 点赞列表响应
 type FavoriteListResponse struct {
 	Response
-	VideoList []*Video `json:"video_list,omitempty"`
+	VideoList []*Video `json:"video_list"`
 }
 
 func BuildFavoriteActionResponse(code int) *FavoriteActionResponse {
@@ -50,7 +50,7 @@ func BuildFavoriteActionResponse(code int) *FavoriteActionResponse {
 func BuildFavoriteListResponse(code int, videoList []*model.VideoAuthorBundle) *FavoriteListResponse {
 	res := &FavoriteListResponse{}
 	res.Response = NewResponse(code, CodeFavoriteMessage[code])
-	if code == CodeSuccess {
+	if code != CodeSuccess {
 		return res
 	}
 	res.VideoList = make([]*Video, len(videoList))

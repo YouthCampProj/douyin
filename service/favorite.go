@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/YouthCampProj/douyin/model"
 	"github.com/YouthCampProj/douyin/pkg/serializer"
+	"log"
 )
 
 type FavoriteActionService struct {
@@ -56,6 +57,7 @@ func (s *FavoriteListService) GetFavoriteList() *serializer.FavoriteListResponse
 	// 这里假定已经判断过token有效性 故不再验证userID是否有效
 	videoAuthorBundle, err := model.GetFavoriteVideoList(s.UserID)
 	if err != nil {
+		log.Println(err)
 		return serializer.BuildFavoriteListResponse(serializer.CodeFavoriteListDBFailed, nil)
 	}
 	return serializer.BuildFavoriteListResponse(serializer.CodeSuccess, videoAuthorBundle)

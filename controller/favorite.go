@@ -55,9 +55,15 @@ func FavoriteAction(c *gin.Context) {
 // GET /douyin/favorite/list/
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18902464
 func GetFavoriteList(c *gin.Context) {
-	if !utils.UserIDTest(c.Query("user_id")) {
-		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeUserIDInvalid, nil))
+	if !auth.CheckToken(c.Query("token")) {
+		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
 	}
-	//token := c.Query("token") // 用户token
-	// TODO 点赞列表接口
+	user, err := auth.ParseToken(c.Query("token"))
+	if err != nil {
+		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
+	}
+	favoriteListService := &service.FavoriteListService{
+		UserID: user.ID,
+	}
+	c.JSON(200, favoriteListService.GetFavoriteList())
 }
