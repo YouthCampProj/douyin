@@ -13,3 +13,11 @@ func ParseToken(token string) (*model.User, error) {
 	return model.GetUserByUsername(token)
 	// TODO: 需要解析Token的具体实现
 }
+
+// CheckToken 检查token是否有效
+func CheckToken(token string) bool {
+	_, err := model.GetUserByUsername(token)
+	return err == nil
+
+	// TODO: 需要验证Token的具体实现
+}

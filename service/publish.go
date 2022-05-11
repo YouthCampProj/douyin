@@ -50,19 +50,15 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 }
 
 func (p *PublishListService) GetPublishList() *serializer.PublishListResponse {
-	res := &serializer.PublishListResponse{}
 	user, err := auth.ParseToken(p.Token)
 	if err != nil {
-		return serializer.BuildPublishListResponse(serializer.CodePublishTokenInvalid)
+		return serializer.BuildPublishListResponse(serializer.CodePublishTokenInvalid, nil)
 	}
-	videos, err := model.GetVideoByAuthorID(user.ID)
+
+	videoAuthorBundle, err := model.GetPublishListByAuthorID(user.ID)
 	if err != nil {
-		res.Response = serializer.NewResponse(serializer.CodeGetPublishListError, err.Error())
+		return serializer.BuildPublishListResponse(serializer.CodeGetPublishListError, nil, err.Error())
 	}
-	author := serializer.BuildUserResponse(user, false)
-	res.VideoList = make([]*serializer.Video, 0)
-	for _, video := range videos {
-		res.VideoList = append(res.VideoList, serializer.BuildVideoResponse(video, author, false))
-	}
+	res := serializer.BuildPublishListResponse(serializer.CodeSuccess, videoAuthorBundle)
 	return res
 }

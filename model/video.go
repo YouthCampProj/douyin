@@ -12,6 +12,24 @@ type Video struct {
 	CommentCount  uint64 `json:"comment_count"`
 }
 
+type UserAPI struct {
+	ID            uint64 `json:"id"`
+	Name          string `json:"name"`           // 用户名称
+	FollowCount   uint64 `json:"follow_count"`   // 关注总数
+	FollowerCount uint64 `json:"follower_count"` // 粉丝总数
+	IsFollow      bool   `json:"is_follow"`      // 是否关注
+}
+
+type VideoAuthorBundle struct {
+	ID            uint64   `json:"id"`
+	Author        *UserAPI `json:"author" gorm:"embedded;embeddedPrefix:author_"`
+	PlayURL       string   `json:"play_url"`  // 视频播放地址
+	CoverURL      string   `json:"cover_url"` // 视频封面地址
+	FavoriteCount uint64   `json:"favorite_count"`
+	CommentCount  uint64   `json:"comment_count"`
+	IsFavorite    bool     `json:"is_favorite"`
+}
+
 func GetVideoByTime(unixTime int64) ([]*Video, error) {
 	var videos []*Video
 	latest := time.UnixMilli(unixTime)
@@ -25,6 +43,16 @@ func GetVideoByTime(unixTime int64) ([]*Video, error) {
 func GetVideoByAuthorID(authorID uint64) ([]*Video, error) {
 	var videos []*Video
 	err := DB.Where("author_id = ?", authorID).Find(&videos).Error
+	if err != nil {
+		return nil, err
+	}
+	return videos, nil
+}
+
+// GetVideoListByID 通过视频ID获取视频列表
+func GetVideoListByID(ids []uint64) ([]*Video, error) {
+	var videos []*Video
+	err := DB.Where("id IN (?)", ids).Find(&videos).Error
 	if err != nil {
 		return nil, err
 	}

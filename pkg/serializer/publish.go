@@ -1,5 +1,7 @@
 package serializer
 
+import "github.com/YouthCampProj/douyin/model"
+
 const (
 	CodePublishTokenInvalid = 3000 + iota
 	CodePublishFileSizeError
@@ -34,8 +36,19 @@ func BuildPublishActionResponse(code int) *PublishActionResponse {
 	return res
 }
 
-func BuildPublishListResponse(code int) *PublishListResponse {
+func BuildPublishListResponse(code int, bundle []*model.VideoAuthorBundle, msg ...string) *PublishListResponse {
 	res := &PublishListResponse{}
 	res.Response = NewResponse(code, CodePublishMessages[code])
+	if code != CodeSuccess {
+		if len(msg) > 0 {
+			res.StatusMsg = msg[0]
+		}
+		return res
+	}
+	res.VideoList = make([]*Video, len(bundle))
+	for i, v := range bundle {
+		res.VideoList[i] = BuildVideoResponse(v)
+	}
 	return res
+
 }

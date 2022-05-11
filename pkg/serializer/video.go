@@ -13,14 +13,14 @@ type Video struct {
 	IsFavorite    bool   `json:"is_favorite"`    // true-已点赞，false-未点赞
 }
 
-func BuildVideoResponse(video *model.Video, author *User, isFavorite bool) *Video {
+func BuildVideoResponse(videoAuthorBundle *model.VideoAuthorBundle) *Video {
 	return &Video{
-		ID:            video.ID,
-		Author:        author,
-		PlayURL:       video.PlayURL,
-		CoverURL:      video.CoverURL,
-		FavoriteCount: video.FavoriteCount,
-		CommentCount:  video.CommentCount,
-		IsFavorite:    isFavorite,
+		ID:            videoAuthorBundle.ID,
+		Author:        (*User)(videoAuthorBundle.Author), // 强转struct 后续需要重新处理
+		PlayURL:       videoAuthorBundle.PlayURL,
+		CoverURL:      videoAuthorBundle.CoverURL,
+		FavoriteCount: videoAuthorBundle.FavoriteCount,
+		CommentCount:  videoAuthorBundle.CommentCount,
+		IsFavorite:    videoAuthorBundle.IsFavorite,
 	}
 }
