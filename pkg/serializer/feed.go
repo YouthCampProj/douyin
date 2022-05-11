@@ -19,12 +19,7 @@ type FeedResponse struct {
 	VideoList []*Video `json:"video_list"` // 视频列表
 }
 
-type FeedResponseBuilder struct {
-	Video  *model.Video
-	Author *model.User
-}
-
-func BuildFeedResponse(code int, feedList []*FeedResponseBuilder, nextTime int64) *FeedResponse {
+func BuildFeedResponse(code int, feedList []*model.VideoAuthorBundle, nextTime int64) *FeedResponse {
 	res := &FeedResponse{}
 	if code != CodeSuccess {
 		res.Response = NewResponse(code, CodeFeedMessages[code])
@@ -32,9 +27,9 @@ func BuildFeedResponse(code int, feedList []*FeedResponseBuilder, nextTime int64
 	}
 	res.Response = NewResponse(CodeSuccess, "")
 	res.NextTime = uint64(nextTime)
-	for _, feed := range feedList {
-		authorResponse := BuildUserResponse(feed.Author, false)
-		res.VideoList = append(res.VideoList, BuildVideoResponse(feed.Video, authorResponse, false))
+	res.VideoList = make([]*Video, len(feedList))
+	for i, feed := range feedList {
+		res.VideoList[i] = BuildVideoResponse(feed)
 	}
 	return res
 }

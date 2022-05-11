@@ -51,12 +51,12 @@ func (s *FavoriteActionService) Unlike() *serializer.FavoriteActionResponse {
 	return serializer.BuildFavoriteActionResponse(serializer.CodeFavoriteUnLikeFailed)
 }
 
-//// GetFavoriteList 获取点赞列表
-//func (s *FavoriteListService) GetFavoriteList() *serializer.FavoriteListResponse {
-//	// 这里假定已经判断过token有效性 故不再验证userID是否有效
-//	videos, err := model.GetFavoriteVideoList(s.UserID)
-//	if err != nil {
-//		return serializer.BuildFavoriteListResponse(serializer.CodeFavoriteListDBFailed, nil)
-//	}
-//
-//}
+// GetFavoriteList 获取点赞列表
+func (s *FavoriteListService) GetFavoriteList() *serializer.FavoriteListResponse {
+	// 这里假定已经判断过token有效性 故不再验证userID是否有效
+	videoAuthorBundle, err := model.GetFavoriteVideoList(s.UserID)
+	if err != nil {
+		return serializer.BuildFavoriteListResponse(serializer.CodeFavoriteListDBFailed, nil)
+	}
+	return serializer.BuildFavoriteListResponse(serializer.CodeSuccess, videoAuthorBundle)
+}

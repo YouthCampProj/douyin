@@ -6,21 +6,6 @@ type Favorite struct {
 	VideoID uint64 `json:"video_id"` // 被点赞的视频ID
 }
 
-type FavoriteVideo struct {
-	ID     uint64 `json:"id"`
-	Author struct {
-		ID            uint64 `json:"id"`
-		Name          string `json:"name"`           // 用户名称
-		FollowCount   uint64 `json:"follow_count"`   // 关注总数
-		FollowerCount uint64 `json:"follower_count"` // 粉丝总数
-		IsFollow      bool   `json:"is_follow"`      // 是否关注
-	} `json:"author"`
-	PlayURL       string `json:"play_url"`  // 视频播放地址
-	CoverURL      string `json:"cover_url"` // 视频封面地址
-	FavoriteCount uint64 `json:"favorite_count"`
-	CommentCount  uint64 `json:"comment_count"`
-}
-
 // AddFavorite 添加点赞信息 返回值 0-点赞成功 1-已经点赞 2-数据库错误
 func AddFavorite(userID uint64, videoID uint64) int {
 	if IsFavorite(userID, videoID) {
@@ -52,8 +37,12 @@ func IsFavorite(userID uint64, videoID uint64) bool {
 	return DB.First(&Favorite{}, "user_id = ? and video_id = ?", userID, videoID).Error == nil
 }
 
-//// GetFavoriteVideoList 获取用户的点赞视频
-//func GetFavoriteVideoList(userID uint64) ([]*FavoriteVideo, error) {
-//	var favorites []*FavoriteVideo
-//	DB.
-//}
+// GetFavoriteVideoList 获取用户的点赞视频
+func GetFavoriteVideoList(userID uint64) ([]*VideoAuthorBundle, error) {
+	var favorites []*VideoAuthorBundle
+	err := DB.Raw("SELECT\n    v.ID AS id,\n    u.id AS author_id,\n    u.name AS author_name,\n    u.follow_count AS author_follow_count,\n    u.follower_count AS author_follower_count,\n    IF(r.id IS NULL,false,true) AS author_is_follow,\n    v.play_url AS play_url,\n    v.cover_url AS cover_url,\n    v.favorite_count AS favorite_count,\n    v.comment_count AS comment_count,\n    true AS is_favorite\nFROM videos v\nLEFT JOIN users u ON v.author_id=u.id\nLEFT JOIN relations r on u.id = r.follow_id AND r.user_id = 4\nWHERE v.id IN(\n    SELECT video_id\n    FROM favorites\n    WHERE user_id = 4\n    );", userID, userID).Scan(&favorites).Error
+	if err != nil {
+		return nil, err
+	}
+	return favorites, nil
+}

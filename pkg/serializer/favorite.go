@@ -1,5 +1,7 @@
 package serializer
 
+import "github.com/YouthCampProj/douyin/model"
+
 const (
 	CodeFavoriteLikeFailed = 4000 + iota
 	CodeFavoriteUnLikeFailed
@@ -36,7 +38,7 @@ type FavoriteActionResponse struct {
 // FavoriteListResponse 点赞列表响应
 type FavoriteListResponse struct {
 	Response
-	VideoList []Video `json:"video_list,omitempty"`
+	VideoList []*Video `json:"video_list,omitempty"`
 }
 
 func BuildFavoriteActionResponse(code int) *FavoriteActionResponse {
@@ -45,13 +47,16 @@ func BuildFavoriteActionResponse(code int) *FavoriteActionResponse {
 	return res
 }
 
-func BuildFavoriteListResponse(code int, videoList []Video) *FavoriteListResponse {
+func BuildFavoriteListResponse(code int, videoList []*model.VideoAuthorBundle) *FavoriteListResponse {
 	res := &FavoriteListResponse{}
 	res.Response = NewResponse(code, CodeFavoriteMessage[code])
 	if code == CodeSuccess {
 		return res
 	}
-	res.VideoList = videoList
+	res.VideoList = make([]*Video, len(videoList))
+	for i, v := range videoList {
+		res.VideoList[i] = BuildVideoResponse(v)
+	}
 	return res
 
 }

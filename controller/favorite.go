@@ -6,6 +6,7 @@ import (
 	"github.com/YouthCampProj/douyin/service"
 	"github.com/YouthCampProj/douyin/utils"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 // InitFavoriteRoute 初始化点赞相关路由
@@ -20,20 +21,25 @@ func InitFavoriteRoute(r *gin.RouterGroup) {
 // POST /douyin/favorite/action/
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18902441
 func FavoriteAction(c *gin.Context) {
-	if !utils.UserIDTest(c.Query("user_id")) {
-		c.JSON(200, serializer.BuildPublishActionResponse(serializer.CodeUserIDInvalid))
+	if !auth.CheckToken(c.Query("token")) {
+		log.Println(c.Query("token"))
+		c.JSON(200, serializer.BuildFavoriteActionResponse(serializer.CodeFavoriteTokenInvalid))
+		return
 	}
-	userID := utils.Str2uint64(c.Query("user_id"))
-	if !utils.VideoIDTest(c.Query("video_id")) {
-		c.JSON(200, serializer.BuildPublishActionResponse(serializer.CodeFavoriteVideoIDInvalid))
+	user, err := auth.ParseToken(c.Query("token"))
+	if err != nil {
+		c.JSON(200, serializer.BuildFavoriteActionResponse(serializer.CodeFavoriteTokenInvalid))
 	}
+	userID := user.ID
 	videoID := utils.Str2uint64(c.Query("video_id"))
 	if !utils.FavoriteActionTypeTest(c.Query("action_type")) {
-		c.JSON(200, serializer.BuildPublishActionResponse(serializer.CodeFavoriteActionTypeInvalid))
+		c.JSON(200, serializer.BuildFavoriteActionResponse(serializer.CodeFavoriteActionTypeInvalid))
+		return
 	}
 	actionType := utils.Str2int32(c.Query("action_type"))
 	if !auth.CheckToken(c.Query("token")) {
 		c.JSON(200, serializer.BuildFavoriteActionResponse(serializer.CodeFavoriteTokenInvalid))
+		return
 	}
 
 	favoriteActionService := &service.FavoriteActionService{
