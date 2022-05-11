@@ -6,7 +6,6 @@ import (
 	"github.com/YouthCampProj/douyin/service"
 	"github.com/YouthCampProj/douyin/utils"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 // InitFavoriteRoute 初始化点赞相关路由
@@ -22,7 +21,6 @@ func InitFavoriteRoute(r *gin.RouterGroup) {
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18902441
 func FavoriteAction(c *gin.Context) {
 	if !auth.CheckToken(c.Query("token")) {
-		log.Println(c.Query("token"))
 		c.JSON(200, serializer.BuildFavoriteActionResponse(serializer.CodeFavoriteTokenInvalid))
 		return
 	}
