@@ -1,5 +1,23 @@
 package serializer
 
+const (
+	CodeCommentTokenInvalid = 5000 + iota
+	CodeCommentVideoIDInvalid
+	CodeCommentActionInvalid
+	CodeCommentIDNotFound
+	CodeCommentTextInvalid
+	CodeCommentActionDBFailed
+)
+
+var CodeCommentMessage = map[int]string{
+	CodeCommentTokenInvalid:   "Token is invalid",
+	CodeCommentVideoIDInvalid: "Video ID is invalid",
+	CodeCommentActionInvalid:  "Action is invalid",
+	CodeCommentIDNotFound:     "Comment ID not found",
+	CodeCommentTextInvalid:    "Comment text is invalid",
+	CodeCommentActionDBFailed: "DB failed",
+}
+
 // Comment 评论信息
 type Comment struct {
 	ID         uint64 `json:"id"`          // 评论id
@@ -17,4 +35,10 @@ type CommentActionResponse struct {
 type CommentListResponse struct {
 	Response
 	CommentList []Comment `json:"comment_list,omitempty"`
+}
+
+func BuildCommentActionResponse(status int) *CommentActionResponse {
+	res := &CommentActionResponse{}
+	res.Response = NewResponse(status, CodeCommentMessage[status])
+	return res
 }

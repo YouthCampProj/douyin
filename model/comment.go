@@ -14,3 +14,20 @@ type Comment struct {
 	VideoID     uint64 `json:"video_id"`     // 视频ID
 	CommentText string `json:"comment_text"` // 评论内容
 }
+
+func AddComment(userID uint64, videoID uint64, text string) error {
+	c := &Comment{
+		UserID:      userID,
+		VideoID:     videoID,
+		CommentText: text,
+	}
+	return c.Save()
+}
+
+func DeleteComment(userID uint64, videoID uint64, CommentID uint64) error {
+	return DB.Delete(&Comment{}, "user_id = ? and video_id = ? and id = ?", userID, videoID, CommentID).Error
+}
+
+func (c *Comment) Save() error {
+	return DB.Save(c).Error
+}
