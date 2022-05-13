@@ -49,8 +49,22 @@ func CommentAction(c *gin.Context) {
 // 查看视频的所有评论，按发布时间倒序排列
 // GET /douyin/comment/list
 func GetCommentList(c *gin.Context) {
-	//userID := c.Query("user_id") // 用户ID
-	//token := c.Query("token")    // 用户token
-	//videoID := c.Query("video_id") // 视频ID
+	// TODO 需要对参数进行验证
+
+	userIDstr := c.Query("user_id")   // 用户ID
+	token := c.Query("token")         // 用户token
+	videoIDstr := c.Query("video_id") // 视频ID
 	// TODO 评论列表接口
+
+	userID := utils.Str2uint64(userIDstr)
+	videoID := utils.Str2uint64(videoIDstr)
+	if !auth.CheckTokenWithUserID(token, userID) {
+		c.JSON(200, serializer.BuildCommentListResponse(serializer.CodeCommentTokenInvalid, nil))
+	}
+	commentListService := &service.CommentListService{
+		UserID:  userID,
+		VideoID: videoID,
+	}
+	c.JSON(200, commentListService.GetCommentList())
+
 }

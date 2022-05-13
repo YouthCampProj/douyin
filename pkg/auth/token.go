@@ -21,3 +21,8 @@ func CheckToken(token string) bool {
 
 	// TODO: 需要验证Token的具体实现
 }
+
+func CheckTokenWithUserID(token string, userID uint64) bool {
+	user, _ := ParseToken(token)
+	return user.ID == userID
+}

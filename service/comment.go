@@ -14,6 +14,11 @@ type CommentActionService struct {
 	CommentText string
 }
 
+type CommentListService struct {
+	UserID  uint64
+	VideoID uint64
+}
+
 func (s *CommentActionService) Execute() *serializer.CommentActionResponse {
 	switch s.ActionType {
 	case "1":
@@ -29,7 +34,7 @@ func (s *CommentActionService) Publish() *serializer.CommentActionResponse {
 
 	if err := model.AddComment(s.VideoID, s.UserID, s.CommentText); err != nil {
 		log.Println(err)
-		return serializer.BuildCommentActionResponse(serializer.CodeCommentActionDBFailed)
+		return serializer.BuildCommentActionResponse(serializer.CodeCommentDBFailed)
 	}
 	return serializer.BuildCommentActionResponse(serializer.CodeSuccess)
 }
@@ -37,7 +42,16 @@ func (s *CommentActionService) Publish() *serializer.CommentActionResponse {
 func (s *CommentActionService) Delete() *serializer.CommentActionResponse {
 	if err := model.DeleteComment(s.UserID, s.VideoID, s.CommentID); err != nil {
 		log.Println(err)
-		return serializer.BuildCommentActionResponse(serializer.CodeCommentActionDBFailed)
+		return serializer.BuildCommentActionResponse(serializer.CodeCommentDBFailed)
 	}
 	return serializer.BuildCommentActionResponse(serializer.CodeSuccess)
+}
+
+func (s *CommentListService) GetCommentList() *serializer.CommentListResponse {
+	comments, err := model.GetCommentUserBundle(s.UserID, s.VideoID)
+	if err != nil {
+		log.Println(err)
+		return serializer.BuildCommentListResponse(serializer.CodeCommentDBFailed, nil)
+	}
+	return serializer.BuildCommentListResponse(serializer.CodeSuccess, comments)
 }
