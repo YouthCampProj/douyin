@@ -59,7 +59,7 @@ func BuildCommentListResponse(status int, commentList []*model.CommentUserBundle
 	for i, v := range commentList {
 		res.CommentList[i] = &Comment{
 			ID:         v.ID,
-			User:       (*User)(v.User), // 强转 以后需要进行优化
+			User:       (*User)(v.User), // 强转 以后需要重写相关逻辑
 			Content:    v.Content,
 			CreateDate: v.CreateDate.Format("01-02"),
 		}
