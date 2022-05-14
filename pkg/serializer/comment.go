@@ -4,6 +4,7 @@ import "github.com/YouthCampProj/douyin/model"
 
 const (
 	CodeCommentTokenInvalid = 5000 + iota
+	CodeCommentUserIDInvalid
 	CodeCommentVideoIDInvalid
 	CodeCommentActionInvalid
 	CodeCommentIDNotFound
@@ -12,12 +13,13 @@ const (
 )
 
 var CodeCommentMessage = map[int]string{
-	CodeCommentTokenInvalid:   "Token is invalid",
-	CodeCommentVideoIDInvalid: "Video ID is invalid",
-	CodeCommentActionInvalid:  "Action is invalid",
-	CodeCommentIDNotFound:     "Comment ID not found",
-	CodeCommentTextInvalid:    "Comment text is invalid",
-	CodeCommentDBFailed:       "DB failed",
+	CodeCommentTokenInvalid:   "Token无效",
+	CodeCommentUserIDInvalid:  "UserID无效",
+	CodeCommentVideoIDInvalid: "VideoID无效",
+	CodeCommentActionInvalid:  "无效操作",
+	CodeCommentIDNotFound:     "评论不存在",
+	CodeCommentTextInvalid:    "评论内容非法",
+	CodeCommentDBFailed:       "数据库操作失败",
 }
 
 // Comment 评论信息
@@ -36,7 +38,7 @@ type CommentActionResponse struct {
 // CommentListResponse 评论列表响应
 type CommentListResponse struct {
 	Response
-	CommentList []Comment `json:"comment_list,omitempty"`
+	CommentList []*Comment `json:"comment_list"`
 }
 
 // BuildCommentActionResponse 构建评论操作响应
@@ -53,9 +55,9 @@ func BuildCommentListResponse(status int, commentList []*model.CommentUserBundle
 	if status != CodeSuccess {
 		return res
 	}
-	res.CommentList = make([]Comment, len(commentList))
+	res.CommentList = make([]*Comment, len(commentList))
 	for i, v := range commentList {
-		res.CommentList[i] = Comment{
+		res.CommentList[i] = &Comment{
 			ID:         v.ID,
 			User:       (*User)(v.User), // 强转 以后需要进行优化
 			Content:    v.Content,

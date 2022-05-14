@@ -34,6 +34,7 @@ func CommentAction(c *gin.Context) {
 	user, err := auth.ParseToken(token)
 	if err != nil {
 		c.JSON(200, serializer.BuildCommentActionResponse(serializer.CodeCommentTokenInvalid))
+		return
 	}
 	commentActionService := &service.CommentActionService{
 		UserID:      user.ID,
@@ -54,17 +55,16 @@ func GetCommentList(c *gin.Context) {
 	userIDstr := c.Query("user_id")   // 用户ID
 	token := c.Query("token")         // 用户token
 	videoIDstr := c.Query("video_id") // 视频ID
-	// TODO 评论列表接口
 
 	userID := utils.Str2uint64(userIDstr)
 	videoID := utils.Str2uint64(videoIDstr)
 	if !auth.CheckTokenWithUserID(token, userID) {
 		c.JSON(200, serializer.BuildCommentListResponse(serializer.CodeCommentTokenInvalid, nil))
+		return
 	}
 	commentListService := &service.CommentListService{
 		UserID:  userID,
 		VideoID: videoID,
 	}
 	c.JSON(200, commentListService.GetCommentList())
-
 }

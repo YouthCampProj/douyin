@@ -19,6 +19,8 @@ type CommentListService struct {
 	VideoID uint64
 }
 
+// Execute 根据ActionType执行评论相关操作
+// 1-发布评论 2-删除评论
 func (s *CommentActionService) Execute() *serializer.CommentActionResponse {
 	switch s.ActionType {
 	case "1":
@@ -29,6 +31,7 @@ func (s *CommentActionService) Execute() *serializer.CommentActionResponse {
 	return serializer.BuildCommentActionResponse(serializer.CodeCommentActionInvalid)
 }
 
+// Publish 发布评论
 func (s *CommentActionService) Publish() *serializer.CommentActionResponse {
 	// TODO: 对传入的评论内容进行安全校验
 
@@ -39,6 +42,7 @@ func (s *CommentActionService) Publish() *serializer.CommentActionResponse {
 	return serializer.BuildCommentActionResponse(serializer.CodeSuccess)
 }
 
+// Delete 删除评论
 func (s *CommentActionService) Delete() *serializer.CommentActionResponse {
 	if err := model.DeleteComment(s.UserID, s.VideoID, s.CommentID); err != nil {
 		log.Println(err)
@@ -47,6 +51,7 @@ func (s *CommentActionService) Delete() *serializer.CommentActionResponse {
 	return serializer.BuildCommentActionResponse(serializer.CodeSuccess)
 }
 
+// GetCommentList 获取评论列表
 func (s *CommentListService) GetCommentList() *serializer.CommentListResponse {
 	comments, err := model.GetCommentUserBundle(s.UserID, s.VideoID)
 	if err != nil {
