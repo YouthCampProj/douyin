@@ -52,18 +52,17 @@ func CommentAction(c *gin.Context) {
 func GetCommentList(c *gin.Context) {
 	// TODO 需要对参数进行验证
 
-	userIDstr := c.Query("user_id")   // 用户ID
 	token := c.Query("token")         // 用户token
 	videoIDstr := c.Query("video_id") // 视频ID
 
-	userID := utils.Str2uint64(userIDstr)
 	videoID := utils.Str2uint64(videoIDstr)
-	if !auth.CheckTokenWithUserID(token, userID) {
+	user, err := auth.ParseToken(token)
+	if err != nil {
 		c.JSON(200, serializer.BuildCommentListResponse(serializer.CodeCommentTokenInvalid, nil))
 		return
 	}
 	commentListService := &service.CommentListService{
-		UserID:  userID,
+		UserID:  user.ID,
 		VideoID: videoID,
 	}
 	c.JSON(200, commentListService.GetCommentList())

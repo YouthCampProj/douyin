@@ -35,7 +35,7 @@ func (s *CommentActionService) Execute() *serializer.CommentActionResponse {
 func (s *CommentActionService) Publish() *serializer.CommentActionResponse {
 	// TODO: 对传入的评论内容进行安全校验
 
-	if err := model.AddComment(s.VideoID, s.UserID, s.CommentText); err != nil {
+	if err := model.AddComment(s.UserID, s.VideoID, s.CommentText); err != nil {
 		log.Println(err)
 		return serializer.BuildCommentActionResponse(serializer.CodeCommentDBFailed)
 	}
