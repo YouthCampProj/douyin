@@ -44,9 +44,14 @@ func RelationAction(c *gin.Context) {
 // GET /douyin/relation/follow/list/
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18902568
 func GetRelationFollowList(c *gin.Context) {
-	//userID := c.Query("user_id") // 用户ID
-	//token := c.Query("token")    // 用户token
+	userID := c.Query("user_id") // 用户ID
+	token := c.Query("token")    // 用户token
+	if !auth.CheckToken(token) {
+		c.JSON(200, serializer.BuildRelationFollowListResponse(serializer.CodeRelationTokenInvalid))
+	}
 	//TODO 关注列表接口
+
+	user := auth.ParseToken(token)
 }
 
 // GetRelationFollowerList 获取粉丝列表
