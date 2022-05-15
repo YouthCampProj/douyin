@@ -73,13 +73,13 @@ func UserLogin(c *gin.Context) {
 func GetUserInfo(c *gin.Context) {
 	userID := c.Query("user_id")
 	if !utils.UserIDTest(userID) {
-		c.JSON(200, serializer.BuildUserInfoResponse(serializer.CodeUserIDInvalid, nil, false))
+		c.JSON(200, serializer.BuildUserInfoResponse(serializer.CodeUserIDInvalid, nil))
 		return
 	}
 	token := c.Query("token")
 	user, err := auth.ParseToken(token)
 	if err != nil {
-		c.JSON(200, serializer.BuildUserInfoResponse(serializer.CodeUserTokenInvalid, nil, false))
+		c.JSON(200, serializer.BuildUserInfoResponse(serializer.CodeUserTokenInvalid, nil))
 		return
 	}
 

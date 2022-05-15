@@ -53,3 +53,14 @@ func DeleteFollow(userID, followID uint64) int {
 	}
 	return 0
 }
+
+// GetFollowUserList 获取userID的关注列表
+// requestFromID是发起请求的用户ID(用于构建关注关系)
+func GetFollowUserList(userID, requestFromID uint64) ([]*UserAPI, error) {
+	var userList []*UserAPI
+	if err := DB.Raw("SELECT\n    u.id AS id,\n    u.id AS user_id,\n    u.name AS user_name,\n    u.follow_count AS follow_count,\n    u.follower_count AS follower_count,\n    IF(r.id IS NULL,false,true) AS is_follow\nFROM users u\nLEFT JOIN relations r ON u.id = r.follow_id AND r.user_id=?\nWHERE u.id IN (\n    SELECT r2.follow_id\n    FROM relations r2\n    WHERE r2.user_id=?\n    );", requestFromID, userID).Scan(&userList).Error; err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return userList, nil
+}

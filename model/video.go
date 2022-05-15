@@ -12,14 +12,6 @@ type Video struct {
 	CommentCount  uint64 `json:"comment_count"`
 }
 
-type UserAPI struct {
-	ID            uint64 `json:"id"`
-	Name          string `json:"name"`           // 用户名称
-	FollowCount   uint64 `json:"follow_count"`   // 关注总数
-	FollowerCount uint64 `json:"follower_count"` // 粉丝总数
-	IsFollow      bool   `json:"is_follow"`      // 是否关注
-}
-
 type VideoAuthorBundle struct {
 	ID            uint64   `json:"id"`
 	Author        *UserAPI `json:"author" gorm:"embedded;embeddedPrefix:author_"`

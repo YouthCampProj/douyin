@@ -11,6 +11,11 @@ type RelationActionService struct {
 	ActionType string
 }
 
+type RelationFollowListService struct {
+	UserID        uint64 // 获取该用户ID的关注列表
+	RequestFromID uint64 // 发起获取请求的用户ID
+}
+
 // Execute 执行关注操作
 func (s *RelationActionService) Execute() *serializer.RelationActionResponse {
 	switch s.ActionType {
@@ -47,4 +52,13 @@ func (s *RelationActionService) unfollow() *serializer.RelationActionResponse {
 		return serializer.BuildRelationActionResponse(serializer.CodeRelationDBError)
 	}
 	return serializer.BuildRelationActionResponse(serializer.CodeRelationDBError)
+}
+
+// GetFollowList 获取关注列表
+func (s *RelationFollowListService) GetFollowList() *serializer.RelationFollowListResponse {
+	follows, err := model.GetFollowUserList(s.UserID, s.RequestFromID)
+	if err != nil {
+		return serializer.BuildRelationFollowListResponse(serializer.CodeRelationDBError, nil)
+	}
+	return serializer.BuildRelationFollowListResponse(serializer.CodeSuccess, follows)
 }
