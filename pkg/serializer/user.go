@@ -60,13 +60,13 @@ type UserInfoResponse struct {
 	User *User `json:"user"` // 用户信息
 }
 
-func BuildUserResponse(user *model.User, isFollow bool) *User {
+func BuildUserResponse(user *model.UserAPI) *User {
 	res := &User{
 		ID:            user.ID,
 		Name:          user.Name,
 		FollowCount:   user.FollowCount,
 		FollowerCount: user.FollowerCount,
-		IsFollow:      isFollow,
+		IsFollow:      user.IsFollow,
 	}
 	return res
 }
@@ -97,7 +97,7 @@ func BuildUserRegisterResponse(code int, user *model.User, token string) *UserRe
 	return res
 }
 
-func BuildUserInfoResponse(code int, user *model.User, isFollow bool) *UserInfoResponse {
+func BuildUserInfoResponse(code int, user *model.UserAPI) *UserInfoResponse {
 	res := &UserInfoResponse{}
 	if code != CodeSuccess {
 		res.Response = NewResponse(code, CodeUserMessages[code])
@@ -106,6 +106,6 @@ func BuildUserInfoResponse(code int, user *model.User, isFollow bool) *UserInfoR
 		res.Response = NewResponse(CodeSuccess, CodeUserMessages[CodeSuccess])
 	}
 
-	res.User = BuildUserResponse(user, isFollow)
+	res.User = BuildUserResponse(user)
 	return res
 }

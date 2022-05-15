@@ -9,6 +9,14 @@ type User struct {
 	FollowerCount uint64 `json:"follower_count"` // 粉丝总数
 }
 
+type UserAPI struct {
+	ID            uint64 `json:"id"`
+	Name          string `json:"name"`           // 用户名称
+	FollowCount   uint64 `json:"follow_count"`   // 关注总数
+	FollowerCount uint64 `json:"follower_count"` // 粉丝总数
+	IsFollow      bool   `json:"is_follow"`      // 是否关注
+}
+
 // GetUserByUsername 通过用户名获取用户
 func GetUserByUsername(username string) (*User, error) {
 	user := &User{}
@@ -17,8 +25,8 @@ func GetUserByUsername(username string) (*User, error) {
 }
 
 // GetUserByID 通过ID获取用户
-func GetUserByID(id uint64) (*User, error) {
-	user := &User{}
+func GetUserByID(id uint64) (*UserAPI, error) {
+	user := &UserAPI{}
 	err := DB.First(user, "ID=?", id).Error
 	return user, err
 }

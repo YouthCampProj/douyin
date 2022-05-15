@@ -65,9 +65,9 @@ func (u *UserRegisterService) Register() *serializer.UserRegisterResponse {
 func (u *UserInfoService) GetUserInfo() *serializer.UserInfoResponse {
 	user, err := model.GetUserByID(u.WantedUserID)
 	if err != nil {
-		return serializer.BuildUserInfoResponse(serializer.CodeUserNotFound, nil, false)
+		return serializer.BuildUserInfoResponse(serializer.CodeUserNotFound, nil)
 	}
 	// 获取关注状态
-	isFollow := model.IsFollow(u.UserID, u.WantedUserID)
-	return serializer.BuildUserInfoResponse(serializer.CodeSuccess, user, isFollow)
+	user.IsFollow = model.IsFollow(u.UserID, u.WantedUserID)
+	return serializer.BuildUserInfoResponse(serializer.CodeSuccess, user)
 }
