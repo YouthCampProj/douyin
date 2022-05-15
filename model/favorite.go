@@ -22,7 +22,7 @@ func AddFavorite(userID uint64, videoID uint64) int {
 		return 2
 	}
 	// 更新video表中的点赞数
-	if DB.Model(&Video{}).Where("id = ?", videoID).Update("favorite_count", gorm.Expr("favorite_count + ?", 1)).Error != nil {
+	if DB.Model(&Video{}).Where("id = ?", videoID).Update("favorite_count", gorm.Expr("favorite_count + 1")).Error != nil {
 		return 2
 	}
 	return 0
@@ -38,7 +38,7 @@ func DeleteFavorite(userID uint64, videoID uint64) int {
 		return 2
 	}
 	// 更新video表中的点赞数
-	if DB.Model(&Video{}).Where("id = ?", videoID).Update("favorite_count", gorm.Expr("favorite_count - ?", 1)).Error != nil {
+	if DB.Model(&Video{}).Where("id = ?", videoID).Update("favorite_count", gorm.Expr("favorite_count - 1")).Error != nil {
 		return 2
 	}
 	return 0

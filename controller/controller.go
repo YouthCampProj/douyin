@@ -15,5 +15,4 @@ func InitDouyinRoute(r *gin.RouterGroup) {
 	InitPublishRoute(r.Group("publish"))
 	InitRelationRoutes(r.Group("relation"))
 	InitUserRoute(r.Group("user"))
-
 }
