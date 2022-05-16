@@ -27,6 +27,7 @@ func FavoriteAction(c *gin.Context) {
 	user, err := auth.ParseToken(c.Query("token"))
 	if err != nil {
 		c.JSON(200, serializer.BuildFavoriteActionResponse(serializer.CodeFavoriteTokenInvalid))
+		return
 	}
 	userID := user.ID
 	videoID := utils.Str2uint64(c.Query("video_id"))
@@ -55,10 +56,12 @@ func FavoriteAction(c *gin.Context) {
 func GetFavoriteList(c *gin.Context) {
 	if !auth.CheckToken(c.Query("token")) {
 		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
+		return
 	}
 	user, err := auth.ParseToken(c.Query("token"))
 	if err != nil {
 		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
+		return
 	}
 	favoriteListService := &service.FavoriteListService{
 		UserID: user.ID,

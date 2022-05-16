@@ -39,13 +39,13 @@ func BuildPublishActionResponse(code int) *PublishActionResponse {
 func BuildPublishListResponse(code int, bundle []*model.VideoAuthorBundle, msg ...string) *PublishListResponse {
 	res := &PublishListResponse{}
 	res.Response = NewResponse(code, CodePublishMessages[code])
+	res.VideoList = make([]*Video, len(bundle))
 	if code != CodeSuccess {
 		if len(msg) > 0 {
 			res.StatusMsg = msg[0]
 		}
 		return res
 	}
-	res.VideoList = make([]*Video, len(bundle))
 	for i, v := range bundle {
 		res.VideoList[i] = BuildVideoResponse(v)
 	}
