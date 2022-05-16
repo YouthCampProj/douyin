@@ -52,10 +52,10 @@ func BuildCommentActionResponse(status int) *CommentActionResponse {
 func BuildCommentListResponse(status int, commentList []*model.CommentUserBundle) *CommentListResponse {
 	res := &CommentListResponse{}
 	res.Response = NewResponse(status, CodeCommentMessage[status])
+	res.CommentList = make([]*Comment, len(commentList))
 	if status != CodeSuccess {
 		return res
 	}
-	res.CommentList = make([]*Comment, len(commentList))
 	for i, v := range commentList {
 		res.CommentList[i] = &Comment{
 			ID:         v.ID,
