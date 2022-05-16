@@ -26,9 +26,16 @@ func GetUserByUsername(username string) (*User, error) {
 
 // GetUserByID 通过ID获取用户
 func GetUserByID(id uint64) (*UserAPI, error) {
-	user := &UserAPI{}
+	user := &User{}
 	err := DB.First(user, "ID=?", id).Error
-	return user, err
+	userAPI := &UserAPI{
+		ID:            user.ID,
+		Name:          user.Name,
+		FollowCount:   user.FollowCount,
+		FollowerCount: user.FollowerCount,
+		IsFollow:      false,
+	}
+	return userAPI, err
 }
 
 // NewUser 返回一个新的用户
