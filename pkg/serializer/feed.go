@@ -25,12 +25,8 @@ func BuildFeedResponse(code int, feedList []*model.VideoAuthorBundle, nextTime i
 	res.NextTime = uint64(nextTime)
 	res.VideoList = make([]*Video, len(feedList))
 	if code != CodeSuccess {
-
 		return res
 	}
-	res.Response = NewResponse(CodeSuccess, "")
-	res.NextTime = uint64(nextTime)
-	res.VideoList = make([]*Video, len(feedList))
 	for i, feed := range feedList {
 		res.VideoList[i] = BuildVideoResponse(feed)
 	}
