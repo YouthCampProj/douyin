@@ -1,23 +1,33 @@
 package utils
 
 import (
-	"github.com/YouthCampProj/douyin/pkg/serializer"
+	"log"
 	"mime/multipart"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/YouthCampProj/douyin/pkg/serializer"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // StrEncrypt 对传入字符串进行加密
 func StrEncrypt(str string, salt string) string {
 	// TODO: 实现字符串加密
-	return str
+	str = str + salt
+	hash, err := bcrypt.GenerateFromPassword([]byte(str), bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
+	}
+	return string(hash)
 }
 
-// StrMatch 对传入的加密字符串进行比对
+// StrMatch 对传入的加密字符串进行比对,str2为明文
 func StrMatch(str1 string, str2 string, salt string) bool {
 	// TODO: 实现加密字符串比对
-	return true
+	str2 = str2 + salt
+	err := bcrypt.CompareHashAndPassword([]byte(str1), []byte(str2))
+	return err == nil
 }
 
 func UsernameTest(username string) bool {
