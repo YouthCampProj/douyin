@@ -5,6 +5,7 @@ import (
 	"github.com/YouthCampProj/douyin/pkg/auth"
 	"github.com/YouthCampProj/douyin/pkg/config"
 	"github.com/YouthCampProj/douyin/pkg/serializer"
+	"github.com/YouthCampProj/douyin/pkg/snowflake"
 	"github.com/YouthCampProj/douyin/utils"
 )
 
@@ -51,6 +52,8 @@ func (u *UserRegisterService) Register() *serializer.UserRegisterResponse {
 	user = model.NewUser()
 	user.Name = u.Username
 	user.Password = utils.StrEncrypt(u.Password, config.Conf.Salt)
+	// 生成用户ID
+	user.ID = uint64(snowflake.GenID())
 	err = model.DB.Create(&user).Error
 	if err != nil {
 		return serializer.BuildUserRegisterResponse(serializer.CodeUserRegisterFailed, nil, "")
