@@ -1,25 +1,64 @@
 package auth
 
-import "github.com/YouthCampProj/douyin/model"
+import (
+	"errors"
+	"github.com/YouthCampProj/douyin/model"
+	"github.com/golang-jwt/jwt"
+	"time"
+)
+
+const (
+	TokenExpireDuration = time.Hour * 2 // jwt过期时间
+	issuer              = "douyin"      // 签发人
+)
+
+var TokenSecret = []byte("douyin") // token盐值
+
+// MyClaims jwt保存信息
+type MyClaims struct {
+	Username string `json:"username"`
+	jwt.StandardClaims
+}
 
 // NewToken 生成新的token
 func NewToken(user *model.User) string {
-	return user.Name
-	// TODO: 需要生成Token的具体实现
+	mc := MyClaims{
+		Username: user.Name,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(TokenExpireDuration).Unix(), // 注册过期时间
+			Issuer:    issuer,                                     // 签发人
+		},
+	}
+	// 生成token并返回其字符串
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, mc)
+	tokenString, _ := token.SignedString(TokenSecret)
+	// 缺少错误处理
+	return tokenString
 }
 
 // ParseToken 解析token 获取用户
-func ParseToken(token string) (*model.User, error) {
-	return model.GetUserByUsername(token)
-	// TODO: 需要解析Token的具体实现
+func ParseToken(tokenString string) (*model.User, error) {
+	// 解析token到mc
+	var mc = new(MyClaims)
+	token, err := jwt.ParseWithClaims(tokenString, mc, func(token *jwt.Token) (interface{}, error) {
+		return TokenSecret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	// 校验token
+	if token.Valid {
+		return model.GetUserByUsername(mc.Username)
+	}
+	return nil, errors.New("无效的token")
 }
 
 // CheckToken 检查token是否有效
 func CheckToken(token string) bool {
 	_, err := model.GetUserByUsername(token)
 	return err == nil
-
 	// TODO: 需要验证Token的具体实现
+	// 验证哪个部分，没懂
 }
 
 func CheckTokenWithUserID(token string, userID uint64) bool {
