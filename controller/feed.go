@@ -24,9 +24,10 @@ func GetFeed(c *gin.Context) {
 	if latestTime == 0 {
 		latestTime = time.Now().UnixMilli()
 	}
-
+	token := c.Query("token")
 	feedService := &service.FeedService{
 		LatestTime: latestTime,
+		Token:      token,
 	}
 	c.JSON(200, feedService.GetFeed())
 }

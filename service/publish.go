@@ -12,10 +12,12 @@ import (
 type PublishActionService struct {
 	Token      string
 	FileHeader *multipart.FileHeader
+	Title      string
 }
 
 type PublishListService struct {
-	Token string
+	Token  string
+	UserID uint64
 }
 
 func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
@@ -40,6 +42,7 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 	video.AuthorID = user.ID
 	video.PlayURL = videoURL
 	video.CoverURL = coverURL
+	video.Title = p.Title
 	err = video.Save()
 	if err != nil {
 		res.Response = serializer.NewResponse(serializer.CodePublishUploadError, err.Error())
@@ -50,12 +53,12 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 }
 
 func (p *PublishListService) GetPublishList() *serializer.PublishListResponse {
-	user, err := auth.ParseToken(p.Token)
+	_, err := auth.ParseToken(p.Token)
 	if err != nil {
 		return serializer.BuildPublishListResponse(serializer.CodePublishTokenInvalid, nil)
 	}
 
-	videoAuthorBundle, err := model.GetPublishListByAuthorID(user.ID)
+	videoAuthorBundle, err := model.GetPublishListByAuthorID(p.UserID)
 	if err != nil {
 		return serializer.BuildPublishListResponse(serializer.CodeGetPublishListError, nil, err.Error())
 	}

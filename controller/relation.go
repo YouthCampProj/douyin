@@ -26,7 +26,6 @@ func RelationAction(c *gin.Context) {
 	}
 	toUserIDstr := c.Query("to_user_id") // 对方用户ID
 	actionType := c.Query("action_type") // 1-关注 2-取消关注
-	// TODO 关注操作接口
 
 	user, err := auth.ParseToken(token)
 	if err != nil {
@@ -50,7 +49,6 @@ func GetRelationFollowList(c *gin.Context) {
 		c.JSON(200, serializer.BuildRelationFollowListResponse(serializer.CodeRelationTokenInvalid, nil))
 		return
 	}
-	//TODO 关注列表接口
 
 	userID := utils.Str2uint64(userIDstr)
 	requestFromUser, err := auth.ParseToken(token)
@@ -72,7 +70,6 @@ func GetRelationFollowList(c *gin.Context) {
 func GetRelationFollowerList(c *gin.Context) {
 	userIDstr := c.Query("user_id") // 用户ID
 	token := c.Query("token")       // 用户token
-	// TODO 粉丝列表接口
 
 	userID := utils.Str2uint64(userIDstr)
 	requestFromUser, err := auth.ParseToken(token)

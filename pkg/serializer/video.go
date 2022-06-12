@@ -11,6 +11,7 @@ type Video struct {
 	FavoriteCount uint64 `json:"favorite_count"` // 视频的点赞总数
 	CommentCount  uint64 `json:"comment_count"`  // 视频的评论总数
 	IsFavorite    bool   `json:"is_favorite"`    // true-已点赞，false-未点赞
+	Title         string `json:"title"`          // 视频标题
 }
 
 func BuildVideoResponse(videoAuthorBundle *model.VideoAuthorBundle) *Video {
@@ -22,5 +23,6 @@ func BuildVideoResponse(videoAuthorBundle *model.VideoAuthorBundle) *Video {
 		FavoriteCount: videoAuthorBundle.FavoriteCount,
 		CommentCount:  videoAuthorBundle.CommentCount,
 		IsFavorite:    videoAuthorBundle.IsFavorite,
+		Title:         videoAuthorBundle.Title,
 	}
 }

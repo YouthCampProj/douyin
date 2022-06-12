@@ -58,13 +58,15 @@ func GetFavoriteList(c *gin.Context) {
 		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
 		return
 	}
-	user, err := auth.ParseToken(c.Query("token"))
+	_, err := auth.ParseToken(c.Query("token"))
 	if err != nil {
 		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
 		return
 	}
+	userIDstr := c.Query("user_id")
+	userID := utils.Str2uint64(userIDstr)
 	favoriteListService := &service.FavoriteListService{
-		UserID: user.ID,
+		UserID: userID,
 	}
 	c.JSON(200, favoriteListService.GetFavoriteList())
 }

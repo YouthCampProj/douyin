@@ -29,10 +29,12 @@ func PublishAction(c *gin.Context) {
 		c.JSON(200, serializer.BuildPublishActionResponse(code))
 		return
 	}
+	title := c.PostForm("title")
 
 	PublishActionService := &service.PublishActionService{
 		Token:      token,
 		FileHeader: data,
+		Title:      title,
 	}
 	c.JSON(200, PublishActionService.Publish())
 }
@@ -44,8 +46,11 @@ func PublishAction(c *gin.Context) {
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18901444
 func GetPublishList(c *gin.Context) {
 	token := c.Query("token")
+	userIDstr := c.Query("user_id")
+	userID := utils.Str2uint64(userIDstr)
 	publishListService := &service.PublishListService{
-		Token: token,
+		Token:  token,
+		UserID: userID,
 	}
 	c.JSON(200, publishListService.GetPublishList())
 

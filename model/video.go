@@ -10,6 +10,7 @@ type Video struct {
 	CoverURL      string `json:"cover_url"` // 视频封面地址
 	FavoriteCount uint64 `json:"favorite_count"`
 	CommentCount  uint64 `json:"comment_count"`
+	Title         string `json:"title"`
 }
 
 type VideoAuthorBundle struct {
@@ -20,6 +21,7 @@ type VideoAuthorBundle struct {
 	FavoriteCount uint64   `json:"favorite_count"`
 	CommentCount  uint64   `json:"comment_count"`
 	IsFavorite    bool     `json:"is_favorite"`
+	Title         string   `json:"title"`
 }
 
 func GetVideoByTime(unixTime int64) ([]*Video, error) {

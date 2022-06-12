@@ -50,6 +50,9 @@ func BuildFavoriteActionResponse(code int) *FavoriteActionResponse {
 func BuildFavoriteListResponse(code int, videoList []*model.VideoAuthorBundle) *FavoriteListResponse {
 	res := &FavoriteListResponse{}
 	res.Response = NewResponse(code, CodeFavoriteMessage[code])
+	if len(videoList) == 0 {
+		return res
+	}
 	res.VideoList = make([]*Video, len(videoList))
 	if code != CodeSuccess {
 		return res
