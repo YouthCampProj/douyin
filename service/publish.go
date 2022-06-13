@@ -5,6 +5,7 @@ import (
 	"github.com/YouthCampProj/douyin/pkg/auth"
 	"github.com/YouthCampProj/douyin/pkg/fileprocess"
 	"github.com/YouthCampProj/douyin/pkg/serializer"
+	"github.com/YouthCampProj/douyin/pkg/snowflake"
 	"github.com/YouthCampProj/douyin/pkg/uploader"
 	"mime/multipart"
 )
@@ -39,6 +40,8 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 		return res
 	}
 	video := model.NewVideo()
+	// 生成视频ID
+	video.ID = uint64(snowflake.GenID())
 	video.AuthorID = user.ID
 	video.PlayURL = videoURL
 	video.CoverURL = coverURL

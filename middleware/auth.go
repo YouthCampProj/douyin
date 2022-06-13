@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"github.com/YouthCampProj/douyin/pkg/auth"
+	"github.com/YouthCampProj/douyin/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -45,18 +47,29 @@ func SendAuthResponse(code int, c *gin.Context) {
 // IsTokenMatchUser is a helper function to check if token match user or not
 // Return true for match, false for not match
 func IsTokenMatchUser(token string, userID string) bool {
-	// TODO: 对于传入了userID的请求 需要校验其是否与Token一致
+	user, err := auth.ParseToken(token)
+	if err != nil {
+		return false
+	}
+	if utils.Str2uint64(userID) != user.ID {
+		// token not match user
+		return false
+	}
 	return true
 }
 
 // CheckTokenValidated return 0,true for valid token, AuthResponseCode, false for invalid token
-func CheckTokenValidated(token string) (int, bool) {
+func CheckTokenValidated(tokenString string) (int, bool) {
 	// 未提供Token
-	if token == "" {
+	if tokenString == "" {
 		return AuthNoTokenProvided, false
 	}
 	// TODO: Token与约束条件不符合
+	// 没有懂这个约束条件
 	// TODO: Token过期
-
+	_, err := auth.ParseToken(tokenString)
+	if err != nil {
+		return AuthTokenInvalid, false
+	}
 	return 0, true
 }
