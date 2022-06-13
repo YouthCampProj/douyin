@@ -14,6 +14,7 @@ type FavoriteActionService struct {
 
 type FavoriteListService struct {
 	UserID uint64
+	ReqID  uint64
 }
 
 func (s *FavoriteActionService) Execute() *serializer.FavoriteActionResponse {
@@ -55,7 +56,13 @@ func (s *FavoriteActionService) Unlike() *serializer.FavoriteActionResponse {
 // GetFavoriteList 获取点赞列表
 func (s *FavoriteListService) GetFavoriteList() *serializer.FavoriteListResponse {
 	// 这里假定已经判断过token有效性 故不再验证userID是否有效
-	videoAuthorBundle, err := model.GetFavoriteVideoList(s.UserID)
+	var videoAuthorBundle []*model.VideoAuthorBundle
+	var err error
+	if s.ReqID != 0 {
+		videoAuthorBundle, err = model.GetFavoriteVideoList(s.UserID, s.ReqID)
+	} else {
+		videoAuthorBundle, err = model.GetFavoriteVideoList(s.UserID)
+	}
 	if err != nil {
 		log.Println(err)
 		return serializer.BuildFavoriteListResponse(serializer.CodeFavoriteListDBFailed, nil)
