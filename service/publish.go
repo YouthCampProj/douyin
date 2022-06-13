@@ -32,7 +32,7 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 		return serializer.BuildPublishActionResponse(serializer.CodePublishTokenInvalid)
 	}
 	videoPath := "uploads/" + strconv.FormatUint(user.ID, 10) + "/" + time.Now().Format("2006-01-02")
-	err = os.MkdirAll(videoPath, 0755)
+	err = os.MkdirAll(videoPath, 0750)
 	if err != nil && !os.IsExist(err) {
 		res.Response = serializer.NewResponse(serializer.CodePublishUploadError, err.Error())
 		return res
