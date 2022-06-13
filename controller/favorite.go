@@ -54,19 +54,25 @@ func FavoriteAction(c *gin.Context) {
 // GET /douyin/favorite/list/
 // https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18902464
 func GetFavoriteList(c *gin.Context) {
-	if !auth.CheckToken(c.Query("token")) {
-		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
-		return
-	}
-	_, err := auth.ParseToken(c.Query("token"))
-	if err != nil {
-		c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
-		return
+	token := c.Query("token")
+	var reqID uint64 = 0
+	if token != "" {
+		if !auth.CheckToken(c.Query("token")) {
+			c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
+			return
+		}
+		reqUser, err := auth.ParseToken(c.Query("token"))
+		if err != nil {
+			c.JSON(200, serializer.BuildFavoriteListResponse(serializer.CodeFavoriteTokenInvalid, nil))
+			return
+		}
+		reqID = reqUser.ID
 	}
 	userIDstr := c.Query("user_id")
 	userID := utils.Str2uint64(userIDstr)
 	favoriteListService := &service.FavoriteListService{
 		UserID: userID,
+		ReqID:  reqID,
 	}
 	c.JSON(200, favoriteListService.GetFavoriteList())
 }

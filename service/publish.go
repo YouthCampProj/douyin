@@ -21,8 +21,8 @@ type PublishActionService struct {
 }
 
 type PublishListService struct {
-	Token  string
 	UserID uint64
+	ReqID  uint64
 }
 
 func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
@@ -68,15 +68,20 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 }
 
 func (p *PublishListService) GetPublishList() *serializer.PublishListResponse {
-	_, err := auth.ParseToken(p.Token)
-	if err != nil {
-		return serializer.BuildPublishListResponse(serializer.CodePublishTokenInvalid, nil)
+	var videoAuthorBundle []*model.VideoAuthorBundle
+	var err error
+	if p.ReqID == 0 {
+		videoAuthorBundle, err = model.GetPublishListByAuthorID(p.UserID)
+		if err != nil {
+			return serializer.BuildPublishListResponse(serializer.CodeGetPublishListError, nil, err.Error())
+		}
+	} else {
+		videoAuthorBundle, err = model.GetPublishListByAuthorID(p.UserID, p.ReqID)
+		if err != nil {
+			return serializer.BuildPublishListResponse(serializer.CodeGetPublishListError, nil, err.Error())
+		}
 	}
 
-	videoAuthorBundle, err := model.GetPublishListByAuthorID(p.UserID)
-	if err != nil {
-		return serializer.BuildPublishListResponse(serializer.CodeGetPublishListError, nil, err.Error())
-	}
 	res := serializer.BuildPublishListResponse(serializer.CodeSuccess, videoAuthorBundle)
 	return res
 }
