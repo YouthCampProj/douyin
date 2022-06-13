@@ -42,7 +42,7 @@ func DeleteFollow(userID, followID uint64) int {
 		return 1
 	}
 	// 删除关注
-	if err := DB.Where("user_id=? AND follow_id=?", userID, followID).Delete(&Relation{}); err != nil {
+	if err := DB.Where("user_id=? AND follow_id=?", userID, followID).Delete(&Relation{}).Error; err != nil {
 		log.Println(err)
 		return 2
 	}
