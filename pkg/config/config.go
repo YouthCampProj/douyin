@@ -17,11 +17,6 @@ type Config struct {
 		Domain string `yaml:"domain"`
 		IP     string `yaml:"ip"`
 		Port   int    `yaml:"port"`
-		SSL    struct {
-			Enable bool   `yaml:"enable"`
-			Cert   string `yaml:"cert"`
-			Key    string `yaml:"key"`
-		} `yaml:"ssl"`
 	} `yaml:"site"`
 	MySQL struct {
 		Host string `yaml:"host"` // Mysql地址
@@ -56,9 +51,6 @@ func GenerateConfigFile(path string) {
 	c.Site.Domain = "http://localhost:8080"
 	c.Site.IP = "0.0.0.0"
 	c.Site.Port = 8080
-	c.Site.SSL.Enable = false
-	c.Site.SSL.Cert = "/PATH/TO/CERT.PEM"
-	c.Site.SSL.Key = "/PATH/TO/KEY.PEM"
 	c.MySQL.Host = "localhost"
 	c.MySQL.Port = 3306
 	c.MySQL.User = "douyin"
