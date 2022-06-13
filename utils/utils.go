@@ -78,7 +78,7 @@ func Str2int32(str string) int32 {
 }
 
 func PublishDataTest(data *multipart.FileHeader) int {
-	if data.Size == 0 {
+	if data == nil || data.Size == 0 {
 		return serializer.CodePublishFileInvalid
 	}
 	if data.Filename == "" {

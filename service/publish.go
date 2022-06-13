@@ -3,11 +3,15 @@ package service
 import (
 	"github.com/YouthCampProj/douyin/model"
 	"github.com/YouthCampProj/douyin/pkg/auth"
+	"github.com/YouthCampProj/douyin/pkg/config"
 	"github.com/YouthCampProj/douyin/pkg/fileprocess"
 	"github.com/YouthCampProj/douyin/pkg/serializer"
 	"github.com/YouthCampProj/douyin/pkg/snowflake"
-	"github.com/YouthCampProj/douyin/pkg/uploader"
+	"github.com/gin-gonic/gin"
 	"mime/multipart"
+	"os"
+	"strconv"
+	"time"
 )
 
 type PublishActionService struct {
@@ -27,13 +31,21 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 	if err != nil {
 		return serializer.BuildPublishActionResponse(serializer.CodePublishTokenInvalid)
 	}
-	videoPath := "uploads/" + p.FileHeader.Filename
-	videoURL, err := uploader.UploadToLocal(p.FileHeader, videoPath)
+	videoPath := "uploads/" + strconv.FormatUint(user.ID, 10) + "/" + time.Now().Format("2006-01-02")
+	err = os.MkdirAll(videoPath, 0755)
+	if err != nil && !os.IsExist(err) {
+		res.Response = serializer.NewResponse(serializer.CodePublishUploadError, err.Error())
+		return res
+	}
+	ctx := &gin.Context{}
+	err = ctx.SaveUploadedFile(p.FileHeader, videoPath+"/"+p.FileHeader.Filename)
 	if err != nil {
 		res.Response = serializer.NewResponse(serializer.CodePublishUploadError, err.Error())
 		return res
 	}
-	coverPath := "uploads/" + p.FileHeader.Filename + ".jpg"
+	videoPath += "/" + p.FileHeader.Filename
+	videoURL := config.Conf.Site.Domain + videoPath
+	coverPath := videoPath + ".jpg"
 	coverURL, err := fileprocess.GetCoverFromLocal(videoPath, coverPath)
 	if err != nil {
 		res.Response = serializer.NewResponse(serializer.CodePublishUploadError, err.Error())
