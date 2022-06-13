@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	TokenExpireDuration = time.Hour * 2 // jwt过期时间
-	issuer              = "douyin"      // 签发人
+	TokenExpireDuration = time.Hour * 24 * 365 // jwt过期时间1年
+	issuer              = "douyin"             // 签发人
 )
 
 var TokenSecret = []byte("douyin") // token盐值
@@ -54,11 +54,12 @@ func ParseToken(tokenString string) (*model.User, error) {
 }
 
 // CheckToken 检查token是否有效
-func CheckToken(token string) bool {
-	_, err := model.GetUserByUsername(token)
-	return err == nil
-	// TODO: 需要验证Token的具体实现
-	// 验证哪个部分，没懂
+func CheckToken(tokenString string) bool {
+	var mc = new(MyClaims)
+	token, err := jwt.ParseWithClaims(tokenString, mc, func(token *jwt.Token) (interface{}, error) {
+		return TokenSecret, nil
+	})
+	return err == nil && token.Valid
 }
 
 func CheckTokenWithUserID(token string, userID uint64) bool {
