@@ -23,7 +23,9 @@ Ubuntu: `apt install ffmepg`
 domain配置项用于上传视频后生成的`play_url`与`cover_url` 注意将域名解析到后端所监听的IP  
 mysql相关配置只需要建立数据库并分配用户权限 数据表会在首次启动时自动生成
 
-## 目录结构
+## 技术说明
+
+### 目录结构
 
 ```zsh
 .
@@ -89,7 +91,7 @@ mysql相关配置只需要建立数据库并分配用户权限 数据表会在�
 12 directories, 47 files
 ```
 
-## 架构设计
+### 架构设计
 
 请求:  
 客户端->controller->service->model->serializer
@@ -97,6 +99,8 @@ mysql相关配置只需要建立数据库并分配用户权限 数据表会在�
 响应:  
 正常响应: serializer->service->controller->客户端  
 异常响应: serializer->controller->客户端
+
+### 项目亮点
 
 controller层在设计之初便考虑了后续通过rpc进行调用的方式，使用了预先构造请求结构的方法对函数进行调用，在后续引入grpc框架时可以做到快速替换升级。
 
