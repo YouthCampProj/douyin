@@ -44,7 +44,7 @@ func (p *PublishActionService) Publish() *serializer.PublishActionResponse {
 		return res
 	}
 	videoPath += "/" + p.FileHeader.Filename
-	videoURL := config.Conf.Site.Domain + videoPath
+	videoURL := config.Conf.Site.Domain + "/" + videoPath
 	coverPath := videoPath + ".jpg"
 	coverURL, err := fileprocess.GetCoverFromLocal(videoPath, coverPath)
 	if err != nil {
