@@ -25,8 +25,14 @@ func (fs *FeedService) GetFeed() *serializer.FeedResponse {
 			return serializer.BuildFeedResponse(serializer.CodePublishTokenInvalid, nil, 0)
 		}
 		latestTime, feedList, err = model.GetFeedListByTime(time.UnixMilli(fs.LatestTime), user.ID)
+		if len(feedList) == 0 {
+			latestTime, feedList, err = model.GetFeedListByTime(time.Now(), user.ID)
+		}
 	} else {
 		latestTime, feedList, err = model.GetFeedListByTime(time.UnixMilli(fs.LatestTime))
+		if len(feedList) == 0 {
+			latestTime, feedList, err = model.GetFeedListByTime(time.Now())
+		}
 	}
 	if err != nil {
 		log.Println(err)

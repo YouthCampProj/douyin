@@ -1,7 +1,6 @@
 package model
 
 import (
-	"errors"
 	"time"
 )
 
@@ -17,7 +16,7 @@ func GetFeedListByTime(unixTime time.Time, userID ...uint64) (time.Time, []*Vide
 		return unixTime, nil, err
 	}
 	if len(videoAuthorBundles) == 0 {
-		return unixTime, nil, errors.New("no video found")
+		return unixTime, videoAuthorBundles, nil
 	}
 	lastVideoID := videoAuthorBundles[len(videoAuthorBundles)-1].ID
 	type CreatedAt struct {
